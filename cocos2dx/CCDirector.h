@@ -355,6 +355,9 @@ public:
 
     /* delta time since last tick to main loop */
 	CC_PROPERTY_READONLY(float, m_fDeltaTime, DeltaTime);
+
+	/* time elapsed since since director started */
+	CC_PROPERTY_READONLY(float, m_fTime, Time);
 	
 public:
     /** returns a shared instance of the director 

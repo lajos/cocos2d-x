@@ -131,6 +131,8 @@ bool CCDirector::init(void)
     m_pszFPS = new char[10];
     m_pLastUpdate = new struct cc_timeval();
 
+	m_fTime = 0.0f;
+
     // paused ?
     m_bPaused = false;
    
@@ -254,6 +256,7 @@ void CCDirector::drawScene(void)
     if (! m_bPaused)
     {
         m_pScheduler->update(m_fDeltaTime);
+		m_fTime += m_fDeltaTime;
     }
 
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -333,10 +336,16 @@ void CCDirector::calculateDeltaTime(void)
 
     *m_pLastUpdate = now;
 }
+
 float CCDirector::getDeltaTime()
 {
 	return m_fDeltaTime;
 }
+
+float CCDirector::getTime() {
+	return m_fTime;
+}
+
 void CCDirector::setOpenGLView(CCEGLView *pobOpenGLView)
 {
     CCAssert(pobOpenGLView, "opengl view should not be null");
