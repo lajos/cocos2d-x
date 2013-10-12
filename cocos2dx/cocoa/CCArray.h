@@ -189,7 +189,7 @@ public:
     /** Add a certain object */
     void addObject(CCObject* object);
     /** Add all elements of an existing array */
-    void addObjectsFromArray(CCArray* otherArray);
+    void addObjectsFromArray(const CCArray* otherArray);
     /** Insert a certain object at a certain index */
     void insertObject(CCObject* object, unsigned int index);
 

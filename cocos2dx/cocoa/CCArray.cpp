@@ -274,9 +274,9 @@ void CCArray::addObject(CCObject* object)
     ccArrayAppendObjectWithResize(data, object);
 }
 
-void CCArray::addObjectsFromArray(CCArray* otherArray)
+void CCArray::addObjectsFromArray(const CCArray* otherArray)
 {
-    ccArrayAppendArrayWithResize(data, otherArray->data);
+    if (otherArray) ccArrayAppendArrayWithResize(data, otherArray->data);
 }
 
 void CCArray::insertObject(CCObject* object, unsigned int index)
