@@ -130,6 +130,10 @@ bool CCDirector::init(void)
     m_uTotalFrames = m_uFrames = 0;
     m_pszFPS = new char[10];
     m_pLastUpdate = new struct cc_timeval();
+	if (CCTime::gettimeofdayCocos2d(m_pLastUpdate, NULL) != 0)
+	{
+		CCLOG("cocos2d: Director: Error in gettimeofday");
+	}
 
 	m_fTime = 0.0f;
 
