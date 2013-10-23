@@ -40,7 +40,11 @@ class CC_DLL CCBool : public CCObject
 {
 public:
     CCBool(bool v)
-        : m_bValue(v) {}
+        : m_bValue(v) 
+	{
+		m_classId = CCClassBool;
+	}
+
     bool getValue() const {return m_bValue;}
 
     static CCBool* create(bool v)

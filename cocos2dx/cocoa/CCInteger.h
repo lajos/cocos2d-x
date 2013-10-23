@@ -15,7 +15,11 @@ class CC_DLL CCInteger : public CCObject
 {
 public:
     CCInteger(int v)
-        : m_nValue(v) {}
+        : m_nValue(v) 
+	{ 
+		m_classId = CCClassInteger; 
+	}
+
     int getValue() const {return m_nValue;}
 
     static CCInteger* create(int v)

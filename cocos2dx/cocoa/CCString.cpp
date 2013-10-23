@@ -10,19 +10,27 @@ NS_CC_BEGIN
 
 CCString::CCString()
     :m_sString("")
-{}
+{
+	m_classId = CCClassString;
+}
 
 CCString::CCString(const char * str)
     :m_sString(str)
-{}
+{
+	m_classId = CCClassString;
+}
 
 CCString::CCString(const std::string& str)
     :m_sString(str)
-{}
+{
+	m_classId = CCClassString;
+}
 
 CCString::CCString(const CCString& str)
     :m_sString(str.getCString())
-{}
+{
+	m_classId = CCClassString;
+}
 
 CCString::~CCString()
 { 

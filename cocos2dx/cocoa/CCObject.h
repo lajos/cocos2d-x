@@ -53,6 +53,18 @@ public:
     virtual CCObject* copyWithZone(CCZone* pZone);
 };
 
+typedef enum CCClassId {
+	CCClassObject = 0,
+	CCClassArray,
+	CCClassBool,
+	CCClassDictionary,
+	CCClassDouble,
+	CCClassFloat,
+	CCClassInteger,
+	CCClassSet,
+	CCClassString
+} CCClassId;
+
 /**
  * @js NA
  */
@@ -64,6 +76,8 @@ public:
     // Lua reference id
     int                 m_nLuaID;
 protected:
+	// class id
+	CCClassId m_classId;
     // count of references
     unsigned int        m_uReference;
     // count of autorelease
@@ -74,7 +88,9 @@ public:
      *  @lua NA
      */
     virtual ~CCObject(void);
-    
+
+	const CCClassId classId() const { return m_classId; }
+
     void release(void);
     void retain(void);
     CCObject* autorelease(void);

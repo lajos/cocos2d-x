@@ -40,7 +40,11 @@ class CC_DLL CCDouble : public CCObject
 {
 public:
     CCDouble(double v)
-        : m_dValue(v) {}
+        : m_dValue(v) 
+	{
+		m_classId = CCClassDouble;
+	}
+
     double getValue() const {return m_dValue;}
 
     static CCDouble* create(double v)

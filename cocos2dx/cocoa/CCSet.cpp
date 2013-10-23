@@ -30,11 +30,13 @@ NS_CC_BEGIN
 
 CCSet::CCSet(void)
 {
+	m_classId = CCClassSet;
     m_pSet = new set<CCObject *>;
 }
 
 CCSet::CCSet(const CCSet &rSetObject)
 {
+	m_classId = CCClassSet;
     m_pSet = new set<CCObject *>(*rSetObject.m_pSet);
 
     // call retain of members

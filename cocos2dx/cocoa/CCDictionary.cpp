@@ -73,7 +73,7 @@ CCDictionary::CCDictionary()
 : m_pElements(NULL)
 , m_eDictType(kCCDictUnknown)
 {
-
+	m_classId = CCClassDictionary;
 }
 
 CCDictionary::~CCDictionary()

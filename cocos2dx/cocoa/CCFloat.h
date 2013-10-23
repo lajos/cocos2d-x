@@ -40,7 +40,10 @@ class CC_DLL CCFloat : public CCObject
 {
 public:
     CCFloat(float v)
-        : m_fValue(v) {}
+        : m_fValue(v) 
+	{
+		m_classId = CCClassFloat;
+	}
     float getValue() const {return m_fValue;}
 
     static CCFloat* create(float v)

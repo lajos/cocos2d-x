@@ -42,6 +42,7 @@ CCObject::CCObject(void)
 , m_uReference(1) // when the object is created, the reference count of it is 1
 , m_uAutoReleaseCount(0)
 {
+	m_classId = CCClassObject;
     static unsigned int uObjectCount = 0;
 
     m_uID = ++uObjectCount;

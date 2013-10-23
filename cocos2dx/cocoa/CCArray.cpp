@@ -32,12 +32,14 @@ NS_CC_BEGIN
 CCArray::CCArray()
 : data(NULL)
 {
+	m_classId = CCClassArray;
     init();
 }
 
 CCArray::CCArray(unsigned int capacity)
 : data(NULL)
 {
+	m_classId = CCClassArray;
     initWithCapacity(capacity);
 }
 
