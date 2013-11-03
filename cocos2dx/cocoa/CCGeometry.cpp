@@ -56,6 +56,16 @@ CCPoint& CCPoint::operator= (const CCSize& size)
     return *this;
 }
 
+bool CCPoint::operator== (const CCPoint& other)
+{
+	return this->equals(other);
+}
+
+bool CCPoint::operator!= (const CCPoint& other)
+{
+	return !this->equals(other);
+}
+
 CCPoint CCPoint::operator+(const CCPoint& right) const
 {
     return CCPoint(this->x + right.x, this->y + right.y);

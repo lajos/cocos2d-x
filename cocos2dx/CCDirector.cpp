@@ -124,6 +124,7 @@ bool CCDirector::init(void)
     // FPS
     m_fAccumDt = 0.0f;
     m_fFrameRate = 0.0f;
+	m_fDeltaTimeMax = 0.0f;
     m_pFPSLabel = NULL;
     m_pSPFLabel = NULL;
     m_pDrawsLabel = NULL;
@@ -330,6 +331,10 @@ void CCDirector::calculateDeltaTime(void)
         m_fDeltaTime = MAX(0, m_fDeltaTime);
     }
 
+	if (m_fDeltaTimeMax>0 && m_fDeltaTime>m_fDeltaTimeMax) {
+		m_fDeltaTime = m_fDeltaTimeMax;
+	}
+
 #ifdef DEBUG
     // If we are debugging our code, prevent big delta time
     if(m_fDeltaTime > 0.2f)
@@ -344,6 +349,16 @@ void CCDirector::calculateDeltaTime(void)
 float CCDirector::getDeltaTime()
 {
 	return m_fDeltaTime;
+}
+
+float CCDirector::getDeltaTimeMax()
+{
+	return m_fDeltaTimeMax;
+}
+
+void CCDirector::setDeltaTimeMax(float v)
+{
+	m_fDeltaTimeMax = v;
 }
 
 float CCDirector::getTime() {
