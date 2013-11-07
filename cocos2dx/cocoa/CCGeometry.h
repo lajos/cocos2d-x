@@ -86,6 +86,14 @@ public:
     /**
      * @lua NA
      */
+    CCPoint& operator+=(const CCPoint& other);
+    /**
+     * @lua NA
+     */
+    CCPoint& operator-=(const CCPoint& other);
+    /**
+     * @lua NA
+     */
     CCPoint operator-() const;
     /**
      * @lua NA

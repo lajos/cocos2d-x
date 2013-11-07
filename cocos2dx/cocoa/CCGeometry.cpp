@@ -76,6 +76,19 @@ CCPoint CCPoint::operator-(const CCPoint& right) const
     return CCPoint(this->x - right.x, this->y - right.y);
 }
 
+CCPoint& CCPoint::operator+=(const CCPoint& other) {
+	this->x += other.x;
+	this->y += other.y;
+	return *this;
+}
+
+CCPoint& CCPoint::operator-=(const CCPoint& other) {
+	this->x -= other.x;
+	this->y -= other.y;
+	return *this;
+}
+
+
 CCPoint CCPoint::operator-() const
 {
 	return CCPoint(-x, -y);
