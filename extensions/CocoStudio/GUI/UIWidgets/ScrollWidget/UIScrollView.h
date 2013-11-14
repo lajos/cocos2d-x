@@ -25,7 +25,7 @@
 #ifndef __UISCROLLVIEW_H__
 #define __UISCROLLVIEW_H__
 
-#include "../../Layouts/Layout.h"
+#include "../../Layouts/UILayout.h"
 #include "UIScrollInterface.h"
 
 NS_CC_EXT_BEGIN
@@ -66,7 +66,7 @@ typedef void (CCObject::*SEL_ScrollToRightEvent)(CCObject*);
 /************************/
 
 
-class UIScrollView : public Layout , public UIScrollInterface
+class UIScrollView : public UILayout , public UIScrollInterface
 {
 public:
     /**
@@ -109,7 +109,7 @@ public:
      *
      * @return inner container.
      */
-    Layout* getInnerContainer();
+    UILayout* getInnerContainer();
     
     /**
      * Scroll inner container to bottom boundary of scrollview.
@@ -242,7 +242,7 @@ public:
     /**
      * Add call back function called scrollview event triggered
      */
-    void addEventListener(CCObject* target, SEL_ScrollViewEvent selector);
+    void addEventListenerScrollView(CCObject* target, SEL_ScrollViewEvent selector);
     
     /*******Compatible*******/
     /**
@@ -371,9 +371,9 @@ protected:
      */
     virtual void setClippingEnable(bool is){setClippingEnabled(is);};
     /************/
-    virtual void setClippingEnabled(bool able){Layout::setClippingEnabled(able);};
+    virtual void setClippingEnabled(bool able){UILayout::setClippingEnabled(able);};
 protected:
-    Layout* m_pInnerContainer;
+    UILayout* m_pInnerContainer;
     
     SCROLLVIEW_DIR m_eDirection;
 
@@ -421,8 +421,8 @@ protected:
 
 
     
-    CCObject* m_pEventListener;
-    SEL_ScrollViewEvent m_pfnEventSelector;
+    CCObject* m_pScrollViewEventListener;
+    SEL_ScrollViewEvent m_pfnScrollViewEventSelector;
     
 
     

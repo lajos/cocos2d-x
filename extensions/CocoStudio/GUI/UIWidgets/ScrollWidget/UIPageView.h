@@ -25,7 +25,7 @@
 #ifndef __UIPAGEVIEW_H__
 #define __UIPAGEVIEW_H__
 
-#include "../../Layouts/Layout.h"
+#include "../../Layouts/UILayout.h"
 #include "UIScrollInterface.h"
 
 NS_CC_EXT_BEGIN
@@ -48,7 +48,7 @@ typedef enum {
     PAGEVIEW_TOUCHRIGHT
 }PVTouchDir;
 
-class UIPageView : public Layout , public UIScrollInterface
+class UIPageView : public UILayout , public UIScrollInterface
 {
     
 public:
@@ -83,21 +83,21 @@ public:
      *
      * @param page    page to be added to pageview.
      */
-    void addPage(Layout* page);
+    void addPage(UILayout* page);
     
     /**
      * Inert a page to pageview.
      *
      * @param page    page to be added to pageview.
      */
-    void insertPage(Layout* page, int idx);
+    void insertPage(UILayout* page, int idx);
     
     /**
      * Remove a page of pageview.
      *
      * @param page    page which will be removed.
      */
-    void removePage(Layout* page);
+    void removePage(UILayout* page);
 
     /**
      * Remove a page at index of pageview.
@@ -105,6 +105,8 @@ public:
      * @param index    index of page.
      */
     void removePageAtIndex(int index);
+    
+    void removeAllPages();
     
     /**
      * scroll pageview to index.
@@ -122,18 +124,16 @@ public:
     
     CCArray* getPages();
     
+    UILayout* getPage(int index);
+    
     // event
-    void addEventListener(CCObject *target, SEL_PageViewEvent selector);
+    void addEventListenerPageView(CCObject *target, SEL_PageViewEvent selector);
     /*******Compatible*******/
     //Add call back function called when page turning.
     void addPageTurningEvent(CCObject *target, SEL_PageViewPageTurningEvent selector);
     /**************/
     
-    //override "removeChild" method of widget.
-    virtual bool removeChild(UIWidget* widget);
-    
-    //override "removeAllChildrenAndCleanUp" method of widget.
-    virtual void removeAllChildren();
+
     
     //override "onTouchBegan" method of widget.
     virtual bool onTouchBegan(const CCPoint &touchPoint);
@@ -153,6 +153,24 @@ public:
     virtual void doLayout(){};
     
     /**
+     * Sets LayoutType.
+     *
+     * @see LayoutType
+     *
+     * @param LayoutType
+     */
+    virtual void setLayoutType(LayoutType type){};
+    
+    /**
+     * Gets LayoutType.
+     *
+     * @see LayoutType
+     *
+     * @return LayoutType
+     */
+    virtual LayoutType getLayoutType() const{return LAYOUT_ABSOLUTE;};
+    
+    /**
      * Returns the "class name" of widget.
      */
     virtual const char* getDescription() const;
@@ -162,13 +180,15 @@ public:
      * These methods will be removed
      */
     int getPage() const{return getCurPageIndex();};
-    void removePage(Layout* page, bool cleanup){removePage(page);};
+    void removePage(UILayout* page, bool cleanup){removePage(page);};
     void removePageAtIndex(int index, bool cleanup){removePageAtIndex(index);};
     /************/
 protected:
     virtual bool addChild(UIWidget* widget);
+    virtual bool removeChild(UIWidget* widget);
+    virtual void removeAllChildren();
     virtual bool init();
-    Layout* createPage();
+    UILayout* createPage();
     float getPositionXByIndex(int idx);
     void updateBoundaryPages();
     virtual void handlePressLogic(const CCPoint &touchPoint);
@@ -191,13 +211,12 @@ protected:
      */
     virtual void setClippingEnable(bool is){setClippingEnabled(is);};
     /************/
-    virtual void setClippingEnabled(bool able){Layout::setClippingEnabled(able);};
+    virtual void setClippingEnabled(bool able){UILayout::setClippingEnabled(able);};
 protected:
     int m_nCurPageIdx;
     CCArray* m_pages;
     PVTouchDir m_touchMoveDir;
     float m_fTouchStartLocation;
-    float m_fTouchEndLocation;
     float m_fTouchMoveStartLocation;
     CCPoint movePagePoint;
     UIWidget* m_pLeftChild;
@@ -209,8 +228,8 @@ protected:
     float m_fAutoScrollSpeed;
     int m_nAutoScrollDir;
     float m_fChildFocusCancelOffset;
-    CCObject* m_pEventListener;
-    SEL_PageViewEvent m_pfnEventSelector;
+    CCObject* m_pPageViewEventListener;
+    SEL_PageViewEvent m_pfnPageViewEventSelector;
     /*compatible*/
     CCObject* m_pPageTurningListener;
     SEL_PageViewPageTurningEvent m_pfnPageTurningSelector;

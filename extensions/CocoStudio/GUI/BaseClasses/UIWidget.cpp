@@ -24,7 +24,7 @@
 
 #include "UIWidget.h"
 #include "../System/UILayer.h"
-#include "../Layouts/Layout.h"
+#include "../Layouts/UILayout.h"
 #include "../System/UIHelper.h"
 
 NS_CC_EXT_BEGIN
@@ -69,6 +69,7 @@ m_sizePercent(CCPointZero),
 m_ePositionType(POSITION_ABSOLUTE),
 m_positionPercent(CCPointZero),
 m_bIsRunning(false),
+m_pUserObject(NULL),
 
 /*Compatible*/
 m_pPushListener(NULL),
@@ -86,11 +87,26 @@ m_pfnCancelSelector(NULL)
 
 UIWidget::~UIWidget()
 {
-    releaseResoures();
+    m_pPushListener = NULL;
+    m_pfnPushSelector = NULL;
+    m_pMoveListener = NULL;
+    m_pfnMoveSelector = NULL;
+    m_pReleaseListener = NULL;
+    m_pfnReleaseSelector = NULL;
+    m_pCancelListener = NULL;
+    m_pfnCancelSelector = NULL;
+    m_pTouchEventListener = NULL;
+    m_pfnTouchEventSelector = NULL;
+    removeAllChildren();
+    m_children->release();
+    m_pRenderer->removeAllChildrenWithCleanup(true);
+    m_pRenderer->removeFromParentAndCleanup(true);
+    m_pRenderer->release();
     setParent(NULL);
     m_pLayoutParameterDictionary->removeAllObjects();
     CC_SAFE_RELEASE(m_pLayoutParameterDictionary);
     CC_SAFE_RELEASE(m_pScheduler);
+    CC_SAFE_RELEASE(m_pUserObject);
 }
 
 UIWidget* UIWidget::create()
@@ -127,23 +143,6 @@ bool UIWidget::init()
     return true;
 }
 
-void UIWidget::releaseResoures()
-{
-    m_pPushListener = NULL;
-    m_pfnPushSelector = NULL;
-    m_pMoveListener = NULL;
-    m_pfnMoveSelector = NULL;
-    m_pReleaseListener = NULL;
-    m_pfnReleaseSelector = NULL;
-    m_pCancelListener = NULL;
-    m_pfnCancelSelector = NULL;
-    removeAllChildren();
-    m_children->release();
-    m_pRenderer->removeAllChildrenWithCleanup(true);
-    m_pRenderer->removeFromParentAndCleanup(true);
-    m_pRenderer->release();
-}
-
 void UIWidget::onEnter()
 {
     arrayMakeObjectsPerformSelector(m_children, onEnter, UIWidget*);
@@ -155,6 +154,18 @@ void UIWidget::onExit()
 {
     m_bIsRunning = false;
     arrayMakeObjectsPerformSelector(m_children, onExit, UIWidget*);
+}
+
+CCObject* UIWidget::getUserObject()
+{
+    return m_pUserObject;
+}
+
+void UIWidget::setUserObject(CCObject *pUserObject)
+{
+    CC_SAFE_RETAIN(pUserObject);
+    CC_SAFE_RELEASE(m_pUserObject);
+    m_pUserObject = pUserObject;
 }
 
 bool UIWidget::addChild(UIWidget *child)
@@ -303,7 +314,7 @@ void UIWidget::setEnabled(bool enabled)
     }
     else
     {
-        dynamic_cast<RectClippingNode*>(m_pRenderer)->setEnabled(enabled);
+        dynamic_cast<UIRectClippingNode*>(m_pRenderer)->setEnabled(enabled);
     }
     ccArray* arrayChildren = m_children->data;
     int childrenCount = arrayChildren->num;
@@ -316,12 +327,12 @@ void UIWidget::setEnabled(bool enabled)
 
 UIWidget* UIWidget::getChildByName(const char *name)
 {
-    return CCUIHELPER->seekWidgetByName(this, name);
+    return UIHelper::seekWidgetByName(this, name);
 }
 
 UIWidget* UIWidget::getChildByTag(int tag)
 {
-    return CCUIHELPER->seekWidgetByTag(this, tag);
+    return UIHelper::seekWidgetByTag(this, tag);
 }
 
 CCArray* UIWidget::getChildren()
@@ -345,9 +356,20 @@ void UIWidget::setSize(const CCSize &size)
     {
         m_size = size;
     }
-    if (m_bIsRunning)
+    if (m_bIsRunning && m_pWidgetParent)
     {
-        m_sizePercent = (m_pWidgetParent == NULL) ? CCPointZero : ccp(m_customSize.width / m_pWidgetParent->getSize().width, m_customSize.height / m_pWidgetParent->getSize().height);   
+        CCSize pSize = m_pWidgetParent->getSize();
+        float spx = 0.0f;
+        float spy = 0.0f;
+        if (pSize.width > 0.0f)
+        {
+            spx = m_customSize.width / pSize.width;
+        }
+        if (pSize.height > 0.0f)
+        {
+            spy = m_customSize.height / pSize.height;
+        }
+        m_sizePercent = ccp(spx, spy);
     }
     onSizeChanged();
 }
@@ -355,11 +377,11 @@ void UIWidget::setSize(const CCSize &size)
 void UIWidget::setSizePercent(const CCPoint &percent)
 {
     m_sizePercent = percent;
-    if (!m_bIsRunning)
+    CCSize cSize = m_customSize;
+    if (m_bIsRunning)
     {
-        return;
+        cSize = (m_pWidgetParent == NULL) ? CCSizeZero : CCSize(m_pWidgetParent->getSize().width * percent.x , m_pWidgetParent->getSize().height * percent.y);
     }
-    CCSize cSize = (m_pWidgetParent == NULL) ? CCSizeZero : CCSizeMake(m_pWidgetParent->getSize().width * percent.x , m_pWidgetParent->getSize().height * percent.y);
     if (m_bIgnoreSize)
     {
         m_size = getContentSize();
@@ -377,6 +399,7 @@ void UIWidget::updateSizeAndPosition()
     switch (m_eSizeType)
     {
         case SIZE_ABSOLUTE:
+        {
             if (m_bIgnoreSize)
             {
                 m_size = getContentSize();
@@ -385,8 +408,23 @@ void UIWidget::updateSizeAndPosition()
             {
                 m_size = m_customSize;
             }
-            m_sizePercent = (m_pWidgetParent == NULL) ? CCPointZero : ccp(m_customSize.width / m_pWidgetParent->getSize().width, m_customSize.height / m_pWidgetParent->getSize().height);
+            if (m_pWidgetParent)
+            {
+                CCSize pSize = m_pWidgetParent->getSize();
+                float spx = 0.0f;
+                float spy = 0.0f;
+                if (pSize.width > 0.0f)
+                {
+                    spx = m_customSize.width / pSize.width;
+                }
+                if (pSize.height > 0.0f)
+                {
+                    spy = m_customSize.height / pSize.height;
+                }
+                m_sizePercent = ccp(spx, spy);
+            }
             break;
+        }
         case SIZE_PERCENT:
         {
             CCSize cSize = (m_pWidgetParent == NULL) ? CCSizeZero : CCSizeMake(m_pWidgetParent->getSize().width * m_sizePercent.x , m_pWidgetParent->getSize().height * m_sizePercent.y);
@@ -409,14 +447,38 @@ void UIWidget::updateSizeAndPosition()
     switch (m_ePositionType)
     {
         case POSITION_ABSOLUTE:
-            m_positionPercent = (m_pWidgetParent == NULL) ? CCPointZero : ccp(absPos.x / m_pWidgetParent->getSize().width, absPos.y / m_pWidgetParent->getSize().height);
+        {
+            if (m_pWidgetParent)
+            {
+                CCSize pSize = m_pWidgetParent->getSize();
+                if (pSize.width <= 0.0f || pSize.height <= 0.0f)
+                {
+                    m_positionPercent = CCPointZero;
+                }
+                else
+                {
+                    m_positionPercent = ccp(absPos.x / pSize.width, absPos.y / pSize.height);
+                }
+            }
+            else
+            {
+                m_positionPercent = CCPointZero;
+            }
             break;
+        }
         case POSITION_PERCENT:
         {
-            CCSize parentSize = m_pWidgetParent->getSize();
-            absPos = ccp(parentSize.width * m_positionPercent.x, parentSize.height * m_positionPercent.y);
-        }
+            if (m_pWidgetParent)
+            {
+                CCSize parentSize = m_pWidgetParent->getSize();
+                absPos = ccp(parentSize.width * m_positionPercent.x, parentSize.height * m_positionPercent.y);
+            }
+            else
+            {
+                absPos = CCPointZero;
+            }
             break;
+        }
         default:
             break;
     }
@@ -784,7 +846,7 @@ bool UIWidget::clippingParentAreaContainPoint(const CCPoint &pt)
     UIWidget* clippingParent = NULL;
     while (parent)
     {
-        Layout* layoutParent = dynamic_cast<Layout*>(parent);
+        UILayout* layoutParent = dynamic_cast<UILayout*>(parent);
         if (layoutParent)
         {
             if (layoutParent->isClippingEnabled())
@@ -829,9 +891,17 @@ void UIWidget::checkChildInfo(int handleState, UIWidget *sender, const CCPoint &
 
 void UIWidget::setPosition(const CCPoint &pos)
 {
-    if (m_bIsRunning)
+    if (m_bIsRunning && m_pWidgetParent)
     {
-        m_positionPercent = (m_pWidgetParent == NULL) ? CCPointZero : ccp(pos.x / m_pWidgetParent->getSize().width, pos.y / m_pWidgetParent->getSize().height);
+        CCSize pSize = m_pWidgetParent->getSize();
+        if (pSize.width <= 0.0f || pSize.height <= 0.0f)
+        {
+            m_positionPercent = CCPointZero;
+        }
+        else
+        {
+            m_positionPercent = (m_pWidgetParent == NULL) ? CCPointZero : ccp(pos.x / pSize.width, pos.y / pSize.height);
+        }
     }
     m_pRenderer->setPosition(pos);
 }
@@ -839,7 +909,7 @@ void UIWidget::setPosition(const CCPoint &pos)
 void UIWidget::setPositionPercent(const CCPoint &percent)
 {
     m_positionPercent = percent;
-    if (m_bIsRunning)
+    if (m_bIsRunning && m_pWidgetParent)
     {
         CCSize parentSize = m_pWidgetParent->getSize();
         CCPoint absPos = ccp(parentSize.width * m_positionPercent.x, parentSize.height * m_positionPercent.y);
@@ -1154,14 +1224,18 @@ WidgetType UIWidget::getWidgetType() const
     return m_WidgetType;
 }
 
-void UIWidget::setLayoutParameter(LayoutParameter *parameter)
+void UIWidget::setLayoutParameter(UILayoutParameter *parameter)
 {
+    if (!parameter)
+    {
+        return;
+    }
     m_pLayoutParameterDictionary->setObject(parameter, parameter->getLayoutType());
 }
 
-LayoutParameter* UIWidget::getLayoutParameter(LayoutParameterType type)
+UILayoutParameter* UIWidget::getLayoutParameter(LayoutParameterType type)
 {
-    return dynamic_cast<LayoutParameter*>(m_pLayoutParameterDictionary->objectForKey(type));
+    return dynamic_cast<UILayoutParameter*>(m_pLayoutParameterDictionary->objectForKey(type));
 }
 
 const char* UIWidget::getDescription() const

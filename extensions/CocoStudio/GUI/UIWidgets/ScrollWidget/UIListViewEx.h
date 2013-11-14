@@ -32,6 +32,14 @@ NS_CC_EXT_BEGIN
 
 typedef enum
 {
+    LISTVIEWEX_ONSELECTEDITEM
+}ListViewExEventType;
+
+typedef void (cocos2d::CCObject::*SEL_ListViewExEvent)(cocos2d::CCObject*,ListViewExEventType);
+#define listviewexeventselector(_SELECTOR) (SEL_ListViewExEvent)(&_SELECTOR)
+
+typedef enum
+{
     LISTVIEW_GRAVITY_LEFT,
     LISTVIEW_GRAVITY_RIGHT,
     LISTVIEW_GRAVITY_CENTER_HORIZONTAL,
@@ -144,6 +152,10 @@ public:
      * If you change the data, you need to call this mathod.
      */
     void refreshView();
+    
+    int getCurSelectedIndex() const;
+    
+    void addEventListenerListViewEx(cocos2d::CCObject* target, SEL_ListViewExEvent selector);
 
     /**
      * Changes scroll direction of scrollview.
@@ -157,6 +169,10 @@ public:
     virtual const char* getDescription() const;
 
 protected:
+    virtual bool addChild(UIWidget* widget){return UIScrollView::addChild(widget);};
+    virtual bool removeChild(UIWidget* widget){return UIScrollView::removeChild(widget);};
+    virtual void removeAllChildren(){UIScrollView::removeAllChildren();};
+    virtual CCArray* getChildren(){return UIScrollView::getChildren();};
     virtual bool init();
     void updateInnerContainerSize();
     void remedyLayoutParameter(UIWidget* item);
@@ -164,12 +180,17 @@ protected:
     virtual UIWidget* createCloneInstance();
     virtual void copySpecialProperties(UIWidget* model);
     virtual void copyClonedWidgetChildren(UIWidget* model);
+    void selectedItemEvent();
+    virtual void interceptTouchEvent(int handleState,UIWidget* sender,const cocos2d::CCPoint &touchPoint);
 protected:
 
     UIWidget* m_pModel;
     CCArray* m_pItems;
     ListViewGravity m_eGravity;
     float m_fItemsMargin;
+    cocos2d::CCObject*       _listViewEventListener;
+    SEL_ListViewExEvent    _listViewEventSelector;
+    int _curSelectedIndex;
 };
 
 NS_CC_EXT_END

@@ -32,7 +32,10 @@ UIListViewEx::UIListViewEx():
 m_pModel(NULL),
 m_pItems(NULL),
 m_eGravity(LISTVIEW_GRAVITY_CENTER_HORIZONTAL),
-m_fItemsMargin(0.0f)
+m_fItemsMargin(0.0f),
+_listViewEventListener(NULL),
+_listViewEventSelector(NULL),
+_curSelectedIndex(0)
 {
     
 }
@@ -41,6 +44,8 @@ UIListViewEx::~UIListViewEx()
 {
     m_pItems->removeAllObjects();
     CC_SAFE_RELEASE(m_pItems);
+    _listViewEventListener = NULL;
+    _listViewEventSelector = NULL;
 }
 
 UIListViewEx* UIListViewEx::create()
@@ -117,10 +122,10 @@ void UIListViewEx::remedyLayoutParameter(UIWidget *item)
     switch (m_eDirection) {
         case SCROLLVIEW_DIR_VERTICAL:
         {
-            LinearLayoutParameter* llp = (LinearLayoutParameter*)(item->getLayoutParameter(LAYOUT_PARAMETER_LINEAR));
+            UILinearLayoutParameter* llp = (UILinearLayoutParameter*)(item->getLayoutParameter(LAYOUT_PARAMETER_LINEAR));
             if (!llp)
             {
-                LinearLayoutParameter* defaultLp = LinearLayoutParameter::create();
+                UILinearLayoutParameter* defaultLp = UILinearLayoutParameter::create();
                 switch (m_eGravity) {
                     case LISTVIEW_GRAVITY_LEFT:
                         defaultLp->setGravity(LINEAR_GRAVITY_LEFT);
@@ -172,10 +177,10 @@ void UIListViewEx::remedyLayoutParameter(UIWidget *item)
         }
         case SCROLLVIEW_DIR_HORIZONTAL:
         {
-            LinearLayoutParameter* llp = (LinearLayoutParameter*)(item->getLayoutParameter(LAYOUT_PARAMETER_LINEAR));
+            UILinearLayoutParameter* llp = (UILinearLayoutParameter*)(item->getLayoutParameter(LAYOUT_PARAMETER_LINEAR));
             if (!llp)
             {
-                LinearLayoutParameter* defaultLp = LinearLayoutParameter::create();
+                UILinearLayoutParameter* defaultLp = UILinearLayoutParameter::create();
                 switch (m_eGravity) {
                     case LISTVIEW_GRAVITY_TOP:
                         defaultLp->setGravity(LINEAR_GRAVITY_TOP);
@@ -361,6 +366,45 @@ void UIListViewEx::setDirection(SCROLLVIEW_DIR dir)
     
 }
 
+void UIListViewEx::addEventListenerListViewEx(cocos2d::CCObject *target, SEL_ListViewExEvent selector)
+{
+    _listViewEventListener = target;
+    _listViewEventSelector = selector;
+}
+
+void UIListViewEx::selectedItemEvent()
+{
+    if (_listViewEventListener && _listViewEventSelector)
+    {
+        (_listViewEventListener->*_listViewEventSelector)(this, LISTVIEWEX_ONSELECTEDITEM);
+    }
+}
+
+void UIListViewEx::interceptTouchEvent(int handleState, UIWidget *sender, const cocos2d::CCPoint &touchPoint)
+{
+    UIScrollView::interceptTouchEvent(handleState, sender, touchPoint);
+    if (handleState != 1)
+    {
+        UIWidget* parent = sender;
+        while (parent)
+        {
+            if (parent && parent->getParent() == m_pInnerContainer)
+            {
+                _curSelectedIndex = getIndex(parent);
+                break;
+            }
+            parent = parent->getParent();
+        }
+        selectedItemEvent();
+    }
+}
+
+int UIListViewEx::getCurSelectedIndex() const
+{
+    return _curSelectedIndex;
+}
+
+
 void UIListViewEx::refreshView()
 {
     if (!m_pItems)
@@ -376,7 +420,6 @@ void UIListViewEx::refreshView()
         remedyLayoutParameter(item);
     }
     updateInnerContainerSize();
-    doLayout();
 }
 
 void UIListViewEx::onSizeChanged()
