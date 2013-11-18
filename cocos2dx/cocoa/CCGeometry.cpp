@@ -88,21 +88,34 @@ CCPoint& CCPoint::operator-=(const CCPoint& other) {
 	return *this;
 }
 
-
 CCPoint CCPoint::operator-() const
 {
 	return CCPoint(-x, -y);
 }
 
-CCPoint CCPoint::operator*(float a) const
+CCPoint CCPoint::operator*(const float &a) const
 {
     return CCPoint(this->x * a, this->y * a);
 }
 
-CCPoint CCPoint::operator/(float a) const
+CCPoint& CCPoint::operator*=(const float &a)
+{
+	this->x *= a;
+	this->y *= a;
+	return *this;
+}
+
+CCPoint CCPoint::operator/(const float &a) const
 {
 	CCAssert(a, "CCPoint division by 0.");
     return CCPoint(this->x / a, this->y / a);
+}
+
+CCPoint& CCPoint::operator/=(const float &a)
+{
+	this->x *= a;
+	this->y *= a;
+	return *this;
 }
 
 void CCPoint::setPoint(float x, float y)

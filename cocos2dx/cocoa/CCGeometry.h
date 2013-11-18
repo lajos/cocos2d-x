@@ -98,11 +98,19 @@ public:
     /**
      * @lua NA
      */
-    CCPoint operator*(float a) const;
+    CCPoint operator*(const float &a) const;
     /**
      * @lua NA
      */
-    CCPoint operator/(float a) const;
+    CCPoint& operator*=(const float &a);
+    /**
+     * @lua NA
+     */
+    CCPoint operator/(const float &a) const;
+    /**
+     * @lua NA
+     */
+    CCPoint& operator/=(const float &a);
     /**
      * @lua NA
      */
