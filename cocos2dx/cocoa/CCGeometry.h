@@ -235,8 +235,25 @@ public:
     inline CCPoint normalize() const {
         float length = getLength();
         if(length == 0.) return CCPoint(1.f, 0);
-        return *this / getLength();
+        return *this / length;
     };
+
+	 /** Normalizes point.
+     * If the point is 0, it becomes (1, 0)
+     @return CCPoint
+     @since v2.1.4
+     */
+    CCPoint &normal() {
+        float length = getLength();
+        if (length == 0.0f) {
+			this->x = 1.0f;
+			this->y = 0.0f;
+		} else {
+			this->x /= length;
+			this->y /= length;
+		}
+		return *this;
+	};
 
     /** Linear Interpolation between two points a and b
      @returns
