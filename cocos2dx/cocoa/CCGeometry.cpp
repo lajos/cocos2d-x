@@ -32,7 +32,7 @@ CCPoint::CCPoint(void) : x(0), y(0)
 {
 }
 
-CCPoint::CCPoint(float x, float y) : x(x), y(y)
+CCPoint::CCPoint(const float &x, const float &y) : x(x), y(y)
 {
 }
 
@@ -118,7 +118,7 @@ CCPoint& CCPoint::operator/=(const float &a)
 	return *this;
 }
 
-void CCPoint::setPoint(float x, float y)
+void CCPoint::setPoint(const float &x, const float &y)
 {
     this->x = x;
     this->y = y;
@@ -130,7 +130,7 @@ bool CCPoint::equals(const CCPoint& target) const
         && (fabs(this->y - target.y) < FLT_EPSILON);
 }
 
-bool CCPoint::fuzzyEquals(const CCPoint& b, float var) const
+bool CCPoint::fuzzyEquals(const CCPoint& b, const float &var) const
 {
     if(x - var <= b.x && b.x <= x + var)
         if(y - var <= b.y && b.y <= y + var)
@@ -147,7 +147,7 @@ float CCPoint::getAngle(const CCPoint& other) const
     return angle;
 }
 
-CCPoint CCPoint::rotateByAngle(const CCPoint& pivot, float angle) const
+CCPoint CCPoint::rotateByAngle(const CCPoint& pivot, const float &angle) const
 {
     return pivot + (*this - pivot).rotate(CCPoint::forAngle(angle));
 }

@@ -50,7 +50,7 @@ public:
 
 public:
     CCPoint();
-    CCPoint(float x, float y);
+    CCPoint(const float &x, const float &y);
     /**
      * @lua NA
      */
@@ -114,14 +114,14 @@ public:
     /**
      * @lua NA
      */
-    void setPoint(float x, float y);
+    void setPoint(const float &x, const float &y);
     bool equals(const CCPoint& target) const;
     
     /** @returns if points have fuzzy equality which means equal with some degree of variance.
      * @since v2.1.4
      * @lua NA
      */
-    bool fuzzyEquals(const CCPoint& target, float variance) const;
+    bool fuzzyEquals(const CCPoint& target, const float &variance) const;
 
     /** Calculates distance between point an origin
      * @return float
@@ -262,7 +262,7 @@ public:
         otherwise a value between a..b
      @since v2.1.4
      */
-    inline CCPoint lerp(const CCPoint& other, float alpha) const {
+    inline CCPoint lerp(const CCPoint& other, const float &alpha) const {
         return *this * (1.f - alpha) + other * alpha;
     };
 
@@ -272,9 +272,9 @@ public:
      @returns the rotated point
      @since v2.1.4
      */
-    CCPoint rotateByAngle(const CCPoint& pivot, float angle) const;
+    CCPoint rotateByAngle(const CCPoint& pivot, const float &angle) const;
 
-    static inline CCPoint forAngle(const float a)
+    static inline CCPoint forAngle(const float &a)
     {
     	return CCPoint(cosf(a), sinf(a));
     }
