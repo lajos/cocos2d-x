@@ -291,7 +291,7 @@ public:
 
 public:
     CCSize();
-    CCSize(float width, float height);
+    CCSize(const float &width, const float &height);
     /**
      * @lua NA
      */
@@ -319,15 +319,15 @@ public:
     /**
      * @lua NA
      */
-    CCSize operator*(float a) const;
+    CCSize operator*(const float &a) const;
     /**
      * @lua NA
      */
-    CCSize operator/(float a) const;
+    CCSize operator/(const float &a) const;
     /**
      * @lua NA
      */
-    void setSize(float width, float height);
+    void setSize(const float &width, const float &height);
     /**
      * @lua NA
      */
@@ -345,7 +345,7 @@ public:
 
 public:
     CCRect();
-    CCRect(float x, float y, float width, float height);
+    CCRect(const float & x, const float & y, const float & width, const float & height);
     /**
      * @lua NA
      */
@@ -354,7 +354,7 @@ public:
      * @lua NA
      */
     CCRect& operator= (const CCRect& other);
-    void setRect(float x, float y, float width, float height);
+    void setRect(const float & x, const float & y, const float & width, const float & height);
     float getMinX() const; /// return the leftmost x-value of current rect
     float getMidX() const; /// return the midpoint x-value of current rect
     float getMaxX() const; /// return the rightmost x-value of current rect
@@ -367,9 +367,9 @@ public:
 };
 
 
-#define CCPointMake(x, y) CCPoint((float)(x), (float)(y))
-#define CCSizeMake(width, height) CCSize((float)(width), (float)(height))
-#define CCRectMake(x, y, width, height) CCRect((float)(x), (float)(y), (float)(width), (float)(height))
+#define CCPointMake(x, y) CCPoint((const float)(x), (const float)(y))
+#define CCSizeMake(width, height) CCSize((const float)(width), (const float)(height))
+#define CCRectMake(x, y, width, height) CCRect((const float)(x), (const float)(y), (const float)(width), (const float)(height))
 
 
 const CCPoint CCPointZero = CCPointMake(0,0);

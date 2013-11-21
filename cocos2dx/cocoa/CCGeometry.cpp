@@ -158,7 +158,7 @@ CCSize::CCSize(void) : width(0), height(0)
 {
 }
 
-CCSize::CCSize(float width, float height) : width(width), height(height)
+CCSize::CCSize(const float &width, const float &height) : width(width), height(height)
 {
 }
 
@@ -192,18 +192,18 @@ CCSize CCSize::operator-(const CCSize& right) const
     return CCSize(this->width - right.width, this->height - right.height);
 }
 
-CCSize CCSize::operator*(float a) const
+CCSize CCSize::operator*(const float &a) const
 {
     return CCSize(this->width * a, this->height * a);
 }
 
-CCSize CCSize::operator/(float a) const
+CCSize CCSize::operator/(const float &a) const
 {
 	CCAssert(a, "CCSize division by 0.");
     return CCSize(this->width / a, this->height / a);
 }
 
-void CCSize::setSize(float width, float height)
+void CCSize::setSize(const float &width, const float &height)
 {
     this->width = width;
     this->height = height;
@@ -222,7 +222,7 @@ CCRect::CCRect(void)
     setRect(0.0f, 0.0f, 0.0f, 0.0f);
 }
 
-CCRect::CCRect(float x, float y, float width, float height)
+CCRect::CCRect(const float & x, const float & y, const float & width, const float & height)
 {
     setRect(x, y, width, height);
 }
@@ -238,7 +238,7 @@ CCRect& CCRect::operator= (const CCRect& other)
     return *this;
 }
 
-void CCRect::setRect(float x, float y, float width, float height)
+void CCRect::setRect(const float & x, const float & y, const float & width, const float & height)
 {
     // CGRect can support width<0 or height<0
     // CCAssert(width >= 0.0f && height >= 0.0f, "width and height of Rect must not less than 0.");
