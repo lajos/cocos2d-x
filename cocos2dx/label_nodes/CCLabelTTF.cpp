@@ -70,19 +70,19 @@ CCLabelTTF * CCLabelTTF::create()
     return pRet;
 }
 
-CCLabelTTF * CCLabelTTF::create(const char *string, const char *fontName, float fontSize)
+CCLabelTTF * CCLabelTTF::create(const char *string, const char *fontName, const float &fontSize)
 {
     return CCLabelTTF::create(string, fontName, fontSize,
                               CCSizeZero, kCCTextAlignmentCenter, kCCVerticalTextAlignmentTop);
 }
 
-CCLabelTTF * CCLabelTTF::create(const char *string, const char *fontName, float fontSize,
+CCLabelTTF * CCLabelTTF::create(const char *string, const char *fontName, const float &fontSize,
                                 const CCSize& dimensions, CCTextAlignment hAlignment)
 {
     return CCLabelTTF::create(string, fontName, fontSize, dimensions, hAlignment, kCCVerticalTextAlignmentTop);
 }
 
-CCLabelTTF* CCLabelTTF::create(const char *string, const char *fontName, float fontSize,
+CCLabelTTF* CCLabelTTF::create(const char *string, const char *fontName, const float &fontSize,
                                const CCSize &dimensions, CCTextAlignment hAlignment, 
                                CCVerticalTextAlignment vAlignment)
 {

@@ -75,23 +75,29 @@ public:
     /** creates a CCLabelTTF with a font name and font size in points
      @since v2.0.1
      */
-    static CCLabelTTF * create(const char *string, const char *fontName, float fontSize);
+    static CCLabelTTF * create(const char *string, const char *fontName, const float &fontSize);
+	static CCLabelTTF * create(const std::string &string, const std::string &fontName, const float &fontSize) { return create(string.c_str(), fontName.c_str(),  fontSize); }
     
     /** creates a CCLabelTTF from a fontname, horizontal alignment, dimension in points,  and font size in points.
      @since v2.0.1
      */
-    static CCLabelTTF * create(const char *string, const char *fontName, float fontSize,
+    static CCLabelTTF * create(const char *string, const char *fontName, const float &fontSize,
                                const CCSize& dimensions, CCTextAlignment hAlignment);
+	static CCLabelTTF * create(const std::string &string, const std::string &fontName, const float &fontSize,
+                               const CCSize& dimensions, CCTextAlignment hAlignment) { return create(string.c_str(), fontName.c_str(), fontSize, dimensions, hAlignment); }
   
     /** creates a CCLabel from a fontname, alignment, dimension in points and font size in points
      @since v2.0.1
      */
-    static CCLabelTTF * create(const char *string, const char *fontName, float fontSize,
+    static CCLabelTTF * create(const char *string, const char *fontName, const float &fontSize,
                                const CCSize& dimensions, CCTextAlignment hAlignment, 
                                CCVerticalTextAlignment vAlignment);
+	static CCLabelTTF * create(const std::string &string, const std::string &fontName, const float &fontSize,
+		                       const CCSize& dimensions, CCTextAlignment hAlignment, 
+							   CCVerticalTextAlignment vAlignment) { return create(string.c_str(), fontName.c_str(), fontSize, dimensions, hAlignment, vAlignment); }
     
     
-    /** Create a lable with string and a font definition*/
+    /** Create a label with string and a font definition*/
     static CCLabelTTF * createWithFontDefinition(const char *string, ccFontDefinition &textDefinition);
     
     /** initializes the CCLabelTTF with a font name and font size */
