@@ -224,7 +224,7 @@ public:
     /** get default font size */
     static unsigned int fontSize();
     /** set the default font name */
-    static void setFontName(const char *name);
+    static void setFontName(const std::string &name);
     /** get the default font name */
     static const char *fontName();
 

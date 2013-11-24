@@ -38,7 +38,6 @@ NS_CC_BEGIN
     
 static unsigned int _globalFontSize = kCCItemSize;
 static std::string _globalFontName = "Marker Felt";
-static bool _globalFontNameRelease = false;
 
 const unsigned int    kCurrentItem = 0xc0c05001;
 const unsigned int    kZoomActionTag = 0xc0c05002;
@@ -328,14 +327,9 @@ unsigned int CCMenuItemFont::fontSize()
     return _globalFontSize;
 }
 
-void CCMenuItemFont::setFontName(const char *name)
+void CCMenuItemFont::setFontName(const std::string &name)
 {
-    if (_globalFontNameRelease)
-    {
-        _globalFontName.clear();
-    }
     _globalFontName = name;
-    _globalFontNameRelease = true;
 }
 
 const char * CCMenuItemFont::fontName()
@@ -367,7 +361,8 @@ bool CCMenuItemFont::initWithString(const char *value, CCObject* target, SEL_Men
     m_uFontSize = _globalFontSize;
     
     CCLabelTTF *label = CCLabelTTF::create(value, m_strFontName.c_str(), (float)m_uFontSize);
-    if (CCMenuItemLabel::initWithLabel(label, target, selector))
+
+	if (CCMenuItemLabel::initWithLabel(label, target, selector))
     {
         // do something ?
     }
