@@ -248,7 +248,7 @@ void CCMenuItemLabel::selected()
             m_fOriginalScale = this->getScale();
         }
         
-        CCAction *zoomAction = CCScaleTo::create(0.1f, m_fOriginalScale * 1.2f);
+        CCAction *zoomAction = CCScaleTo::create(0.1f, m_fOriginalScale * 1.1f);
         zoomAction->setTag(kZoomActionTag);
         this->runAction(zoomAction);
     }
@@ -507,6 +507,8 @@ bool CCMenuItemSprite::initWithNormalSprite(CCNode* normalSprite, CCNode* select
     setSelectedImage(selectedSprite);
     setDisabledImage(disabledSprite);
 
+	m_fOriginalScale = 1.0f;
+
     if(m_pNormalImage)
     {
         this->setContentSize(m_pNormalImage->getContentSize());
@@ -516,6 +518,14 @@ bool CCMenuItemSprite::initWithNormalSprite(CCNode* normalSprite, CCNode* select
     setCascadeOpacityEnabled(true);
     
     return true;
+}
+
+
+void CCMenuItemSprite::activate()
+{
+	this->stopAllActions();
+	this->setScale( m_fOriginalScale );
+	CCMenuItem::activate();
 }
 
 /**
@@ -542,6 +552,20 @@ void CCMenuItemSprite::selected()
             m_pNormalImage->setVisible(true);
         }
     }
+
+	CCAction *action = getActionByTag(kZoomActionTag);
+	if (action)
+	{
+		this->stopAction(action);
+	}
+	else
+	{
+		m_fOriginalScale = this->getScale();
+	}
+
+	CCAction *zoomAction = CCScaleTo::create(0.1f, m_fOriginalScale * 1.1f);
+	zoomAction->setTag(kZoomActionTag);
+	this->runAction(zoomAction);
 }
 
 void CCMenuItemSprite::unselected()
@@ -561,6 +585,11 @@ void CCMenuItemSprite::unselected()
             m_pDisabledImage->setVisible(false);
         }
     }
+
+	this->stopActionByTag(kZoomActionTag);
+	CCAction *zoomAction = CCScaleTo::create(0.1f, m_fOriginalScale);
+	zoomAction->setTag(kZoomActionTag);
+	this->runAction(zoomAction);
 }
 
 void CCMenuItemSprite::setEnabled(bool bEnabled)

@@ -284,6 +284,7 @@ public:
     :m_pNormalImage(NULL)
     ,m_pSelectedImage(NULL)
     ,m_pDisabledImage(NULL)
+	, m_fOriginalScale(0)
     {}
 
     /** creates a menu item with a normal, selected and disabled image*/
@@ -303,12 +304,14 @@ public:
     /**
      @since v0.99.5
      */
+	virtual void activate();
     virtual void selected();
     virtual void unselected();
     virtual void setEnabled(bool bEnabled);
     
 protected:
     virtual void updateImagesVisibility();
+	float m_fOriginalScale;
 };
 
 
