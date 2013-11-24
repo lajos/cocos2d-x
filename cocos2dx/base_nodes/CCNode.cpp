@@ -74,6 +74,7 @@ CCNode::CCNode(void)
 , m_pParent(NULL)
 // "whole screen" objects. like Scenes and Layers, should set m_bIgnoreAnchorPointForPosition to true
 , m_nTag(kCCNodeTagInvalid)
+, m_sNodeName()
 // userData is always inited as nil
 , m_pUserData(NULL)
 , m_pUserObject(NULL)
@@ -587,6 +588,24 @@ CCNode* CCNode::getChildByTag(int aTag)
     }
     return NULL;
 }
+
+CCNode* CCNode::getChildByNodeName(const std::string &aName)
+{
+	CCAssert(!aName.empty(), "Invalid name empty()");
+
+	if(m_pChildren && m_pChildren->count() > 0)
+	{
+		CCObject* child;
+		CCARRAY_FOREACH(m_pChildren, child)
+		{
+			CCNode* pNode = (CCNode*) child;
+			if(pNode && pNode->m_sNodeName == aName)
+				return pNode;
+		}
+	}
+	return NULL;
+}
+
 
 /* "add" logic MUST only be on this method
 * If a class want's to extend the 'addChild' behavior it only needs

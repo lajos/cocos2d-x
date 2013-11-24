@@ -606,7 +606,15 @@ public:
      *
      * @return a CCNode object whose tag equals to the input parameter
      */
-    CCNode * getChildByTag(int tag);
+    CCNode * getChildByTag(int nodeName);
+    /**
+     * Gets a child from the container with its node name
+     *
+     * @param nodeName   An name to find the child node.
+     *
+     * @return a CCNode object whose node name equals to the input parameter
+     */
+	CCNode* getChildByNodeName(const std::string &aName);
     /**
      * Return an array of children
      *
@@ -791,6 +799,16 @@ public:
      * @param A interger that indentifies the node.
      */
     virtual void setTag(int nTag);
+
+    /**
+     * Returns the nodeName.
+     */
+	virtual const std::string &getNodeName() const { return m_sNodeName; }
+
+    /**
+     * Changes the nodeName.
+     */
+	virtual void setNodeName(const std::string &n) { m_sNodeName = n; }
     
     /**
      * Returns a custom user data pointer
@@ -1427,6 +1445,8 @@ protected:
     CCNode *m_pParent;                  ///< weak reference to parent node
     
     int m_nTag;                         ///< a tag. Can be any number you assigned just to identify this node
+
+	std::string m_sNodeName;            ///< a name. Can be any string you assigned just to identify this node
     
     void *m_pUserData;                  ///< A user assingned void pointer, Can be point to any cpp object
     CCObject *m_pUserObject;            ///< A user assigned CCObject

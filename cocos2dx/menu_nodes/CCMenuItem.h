@@ -68,7 +68,6 @@ public:
     , m_bEnabled(false)            
     , m_pListener(NULL)            
     , m_pfnSelector(NULL)
-	, m_sName()
     , m_nScriptTapHandler(0)
     {}
     /**
@@ -110,18 +109,10 @@ public:
     /** set the target/selector of the menu item*/
     void setTarget(CCObject *rec, SEL_MenuHandler selector);
 
-	/** set the action name of the menu item*/
-	void setName(const std::string &actionName) { m_sName = actionName; }
-
-	/** get the action name of the menu item*/
-	const std::string &getName() const { return m_sName; }
-
-
 protected:
     CCObject*       m_pListener;
     SEL_MenuHandler m_pfnSelector;
     int             m_nScriptTapHandler;
-	std::string     m_sName;
 };
 
 /** @brief An abstract class for "label" CCMenuItemLabel items 
