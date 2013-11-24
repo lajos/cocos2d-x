@@ -354,6 +354,10 @@ static bool _initWithString(const char * pText, cocos2d::CCImage::ETextAlign eAl
 						 size:nSize];
 		
 		if (font == nil) {
+			font = [NSFont fontWithName:[NSString stringWithUTF8String:pFontName] size:nSize];
+		}
+		
+		if (font == nil) {
 			font = [[NSFontManager sharedFontManager]
 					fontWithFamily:@"Arial"
 					traits:NSUnboldFontMask | NSUnitalicFontMask
