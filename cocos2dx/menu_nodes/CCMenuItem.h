@@ -259,6 +259,66 @@ protected:
     std::string m_strFontName;
 };
 
+/** @brief CCMenuItemNode accepts CCNode objects as items.
+ The nodes have 3 different states:
+ - unselected node
+ - selected node
+ - disabled node
+ 
+ @since v2.2.1
+ */
+class CC_DLL CCMenuItemNode : public CCMenuItem
+{
+    /** the node used when the item is not selected */
+    CC_PROPERTY(CCNode*, m_pNormalNode, NormalNode);
+    /** the node used when the item is selected */
+    CC_PROPERTY(CCNode*, m_pSelectedNode, SelectedNode);
+    /** the node used when the item is disabled */
+    CC_PROPERTY(CCNode*, m_pDisabledNode, DisabledNode);
+	/** should bounce? */
+	CC_PROPERTY(bool, m_bBounce, Bounce);
+	/** bounce scale */
+	CC_PROPERTY(float, m_fBounceScale, BounceScale);
+	/** bounce speed */
+	CC_PROPERTY(float, m_fBounceSpeed, BounceSpeed);
+public:
+    /**
+     *  @js ctor
+     */
+    CCMenuItemNode()
+    :m_pNormalNode(NULL)
+    ,m_pSelectedNode(NULL)
+    ,m_pDisabledNode(NULL)
+	,m_fOriginalScale(1)
+	,m_bBounce(true)
+	,m_fBounceScale(1.1f)
+	,m_fBounceSpeed(0.1f)
+    {}
+
+    /** creates a menu item with a normal, selected and disabled node*/
+    static CCMenuItemNode * create(CCNode* normalNode, CCNode* selectedNode, CCNode* disabledNode = NULL);
+    /** creates a menu item with a normal and selected node with target/selector 
+     * @lua NA
+     */
+    static CCMenuItemNode * create(CCNode* normalNode, CCNode* selectedNode, CCObject* target, SEL_MenuHandler selector);
+    /** creates a menu item with a normal,selected  and disabled node with target/selector 
+     * @lua NA
+     */
+    static CCMenuItemNode * create(CCNode* normalNode, CCNode* selectedNode, CCNode* disabledNode, CCObject* target, SEL_MenuHandler selector);
+
+    /** initializes a menu item with a normal, selected  and disabled node with target/selector */
+    bool initWithNormalNode(CCNode* normalNode, CCNode* selectedNode, CCNode* disabledNode, CCObject* target, SEL_MenuHandler selector);
+    
+	virtual void activate();
+    virtual void selected();
+    virtual void unselected();
+    virtual void setEnabled(bool bEnabled);
+    
+protected:
+    virtual void updateNodesVisibility();
+	float m_fOriginalScale;
+};
+
 
 /** @brief CCMenuItemSprite accepts CCNode<CCRGBAProtocol> objects as items.
  The images has 3 different states:

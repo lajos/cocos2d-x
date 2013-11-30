@@ -398,6 +398,264 @@ const char* CCMenuItemFont::fontNameObj()
     return m_strFontName.c_str();
 }
 
+
+//
+//CCMenuItemNode
+//
+
+CCNode * CCMenuItemNode::getNormalNode()
+{
+    return m_pNormalNode;
+}
+
+void CCMenuItemNode::setNormalNode(CCNode* pNode)
+{
+    if (pNode != m_pNormalNode)
+    {
+        if (pNode)
+        {
+            addChild(pNode, 0, kNormalTag);
+            pNode->setAnchorPoint(ccp(0, 0));
+        }
+
+        if (m_pNormalNode)
+        {
+            removeChild(m_pNormalNode, true);
+        }
+
+        m_pNormalNode = pNode;
+        this->setContentSize(m_pNormalNode->getContentSize());
+        this->updateNodesVisibility();
+    }
+}
+
+CCNode * CCMenuItemNode::getSelectedNode()
+{
+    return m_pSelectedNode;
+}
+
+void CCMenuItemNode::setSelectedNode(CCNode* pNode)
+{
+    if (pNode != m_pNormalNode)
+    {
+        if (pNode)
+        {
+            addChild(pNode, 0, kSelectedTag);
+            pNode->setAnchorPoint(ccp(0, 0));
+        }
+
+        if (m_pSelectedNode)
+        {
+            removeChild(m_pSelectedNode, true);
+        }
+
+        m_pSelectedNode = pNode;
+        this->updateNodesVisibility();
+    }
+}
+
+CCNode * CCMenuItemNode::getDisabledNode()
+{
+    return m_pDisabledNode;
+}
+
+void CCMenuItemNode::setDisabledNode(CCNode* pNode)
+{
+    if (pNode != m_pNormalNode)
+    {
+        if (pNode)
+        {
+            addChild(pNode, 0, kDisableTag);
+            pNode->setAnchorPoint(ccp(0, 0));
+        }
+
+        if (m_pDisabledNode)
+        {
+            removeChild(m_pDisabledNode, true);
+        }
+
+        m_pDisabledNode = pNode;
+        this->updateNodesVisibility();
+    }
+}
+
+bool CCMenuItemNode::getBounce()
+{
+	return m_bBounce;
+}
+
+void CCMenuItemNode::setBounce(bool v)
+{
+	m_bBounce = v;
+}
+
+float CCMenuItemNode::getBounceScale()
+{
+	return m_fBounceScale;
+}
+
+void CCMenuItemNode::setBounceScale(float v)
+{
+	m_fBounceScale = v;
+}
+
+float CCMenuItemNode::getBounceSpeed()
+{
+	return m_fBounceSpeed;
+}
+
+void CCMenuItemNode::setBounceSpeed(float v)
+{
+	m_fBounceSpeed = v;
+}
+
+//
+//CCMenuItemNode
+//
+
+CCMenuItemNode * CCMenuItemNode::create(CCNode* normalNode, CCNode* selectedNode, CCNode* disabledNode)
+{
+    return CCMenuItemNode::create(normalNode, selectedNode, disabledNode, NULL, NULL);
+}
+
+CCMenuItemNode * CCMenuItemNode::create(CCNode* normalNode, CCNode* selectedNode, CCObject* target, SEL_MenuHandler selector)
+{
+    return CCMenuItemNode::create(normalNode, selectedNode, NULL, target, selector);
+}
+
+CCMenuItemNode * CCMenuItemNode::create(CCNode *normalNode, CCNode *selectedNode, CCNode *disabledNode, CCObject *target, SEL_MenuHandler selector)
+{
+    CCMenuItemNode *pRet = new CCMenuItemNode();
+    pRet->initWithNormalNode(normalNode, selectedNode, disabledNode, target, selector); 
+    pRet->autorelease();
+    return pRet;
+}
+
+bool CCMenuItemNode::initWithNormalNode(CCNode* normalNode, CCNode* selectedNode, CCNode* disabledNode, CCObject* target, SEL_MenuHandler selector)
+{
+    CCMenuItem::initWithTarget(target, selector); 
+    setNormalNode(normalNode);
+    setSelectedNode(selectedNode);
+    setDisabledNode(disabledNode);
+
+	m_fOriginalScale = normalNode->getScale();
+
+    if(m_pNormalNode)
+    {
+        this->setContentSize(m_pNormalNode->getContentSize());
+    }
+    
+    setCascadeColorEnabled(true);
+    setCascadeOpacityEnabled(true);
+    
+    return true;
+}
+
+
+void CCMenuItemNode::activate()
+{
+	this->stopAllActions();
+	this->setScale( m_fOriginalScale );
+	CCMenuItem::activate();
+}
+
+void CCMenuItemNode::selected()
+{
+    CCMenuItem::selected();
+
+    if (m_pNormalNode)
+    {
+        if (m_pDisabledNode)
+        {
+            m_pDisabledNode->setVisible(false);
+        }
+
+        if (m_pSelectedNode)
+        {
+            m_pNormalNode->setVisible(false);
+            m_pSelectedNode->setVisible(true);
+        }
+        else
+        {
+            m_pNormalNode->setVisible(true);
+        }
+    }
+
+	CCAction *action = getActionByTag(kZoomActionTag);
+	if (action)
+	{
+		this->stopAction(action);
+	}
+	else
+	{
+		m_fOriginalScale = this->getScale();
+	}
+
+	CCAction *zoomAction = CCScaleTo::create(0.1f, m_fOriginalScale * 1.1f);
+	zoomAction->setTag(kZoomActionTag);
+	this->runAction(zoomAction);
+}
+
+void CCMenuItemNode::unselected()
+{
+    CCMenuItem::unselected();
+    if (m_pNormalNode)
+    {
+        m_pNormalNode->setVisible(true);
+
+        if (m_pSelectedNode)
+        {
+            m_pSelectedNode->setVisible(false);
+        }
+
+        if (m_pDisabledNode)
+        {
+            m_pDisabledNode->setVisible(false);
+        }
+    }
+
+	this->stopActionByTag(kZoomActionTag);
+	CCAction *zoomAction = CCScaleTo::create(0.1f, m_fOriginalScale);
+	zoomAction->setTag(kZoomActionTag);
+	this->runAction(zoomAction);
+}
+
+void CCMenuItemNode::setEnabled(bool bEnabled)
+{
+    if( m_bEnabled != bEnabled ) 
+    {
+        CCMenuItem::setEnabled(bEnabled);
+        this->updateNodesVisibility();
+    }
+}
+
+// Helper 
+void CCMenuItemNode::updateNodesVisibility()
+{
+    if (m_bEnabled)
+    {
+        if (m_pNormalNode)   m_pNormalNode->setVisible(true);
+        if (m_pSelectedNode) m_pSelectedNode->setVisible(false);
+        if (m_pDisabledNode) m_pDisabledNode->setVisible(false);
+    }
+    else
+    {
+        if (m_pDisabledNode)
+        {
+            if (m_pNormalNode)   m_pNormalNode->setVisible(false);
+            if (m_pSelectedNode) m_pSelectedNode->setVisible(false);
+            if (m_pDisabledNode) m_pDisabledNode->setVisible(true);
+        }
+        else
+        {
+            if (m_pNormalNode)   m_pNormalNode->setVisible(true);
+            if (m_pSelectedNode) m_pSelectedNode->setVisible(false);
+            if (m_pDisabledNode) m_pDisabledNode->setVisible(false);
+        }
+    }
+}
+
+
 //
 //CCMenuItemSprite
 //
