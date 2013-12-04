@@ -286,7 +286,7 @@ public:
     
     enum TableViewScriptEventType
     {
-        kTableViewScroll   = 0,
+        kTableViewScroll = 0,
         kTableViewZoom,
         kTableCellTouched,
         kTableCellHighLight,
