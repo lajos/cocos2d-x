@@ -61,6 +61,11 @@ bool CCPoint::operator== (const CCPoint& other)
 	return this->equals(other);
 }
 
+bool CCPoint::operator< (const CCPoint& other)
+{
+	return x < other.x || (x == other.x && y < other.y);
+}
+
 bool CCPoint::operator!= (const CCPoint& other)
 {
 	return !this->equals(other);
