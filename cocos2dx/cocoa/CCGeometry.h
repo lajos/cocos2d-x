@@ -74,7 +74,7 @@ public:
     /**
      * @lua NA
      */
-    bool operator< (const CCPoint& other);
+    bool operator< (const CCPoint& other) const;
     /**
      * @lua NA
      */
