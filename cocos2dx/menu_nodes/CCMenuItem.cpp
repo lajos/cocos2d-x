@@ -591,7 +591,7 @@ void CCMenuItemNode::selected()
 		m_fOriginalScale = this->getScale();
 	}
 
-	CCAction *zoomAction = CCScaleTo::create(0.1f, m_fOriginalScale * 1.1f);
+	CCAction *zoomAction = CCScaleTo::create(m_fBounceSpeed, m_fOriginalScale * m_fBounceScale);
 	zoomAction->setTag(kZoomActionTag);
 	this->runAction(zoomAction);
 }
