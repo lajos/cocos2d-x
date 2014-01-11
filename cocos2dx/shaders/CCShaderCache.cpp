@@ -34,6 +34,7 @@ NS_CC_BEGIN
 
 enum {
     kCCShaderType_PositionTextureColor,
+	kCCShaderType_PositionTextureColor2,
     kCCShaderType_PositionTextureColorAlphaTest,
     kCCShaderType_PositionColor,
     kCCShaderType_PositionTexture,
@@ -94,6 +95,13 @@ void CCShaderCache::loadDefaultShaders()
 
     m_pPrograms->setObject(p, kCCShader_PositionTextureColor);
     p->release();
+
+	// Position Texture Color shader
+	p = new CCGLProgram();
+	loadDefaultShader(p, kCCShaderType_PositionTextureColor2);
+
+	m_pPrograms->setObject(p, kCCShader_PositionTextureColor2);
+	p->release();
 
     // Position Texture Color alpha test
     p = new CCGLProgram();
@@ -239,6 +247,14 @@ void CCShaderCache::loadDefaultShader(CCGLProgram *p, int type)
             p->addAttribute(kCCAttributeNameTexCoord, kCCVertexAttrib_TexCoords);
             
             break;
+		case kCCShaderType_PositionTextureColor2:
+			p->initWithVertexShaderByteArray(ccPositionTextureColor2_vert, ccPositionTextureColor2_frag);
+
+			p->addAttribute(kCCAttributeNamePosition, kCCVertexAttrib_Position);
+			p->addAttribute(kCCAttributeNameColor, kCCVertexAttrib_Color);
+			p->addAttribute(kCCAttributeNameTexCoord, kCCVertexAttrib_TexCoords);
+
+			break;
         case kCCShaderType_PositionTextureColorAlphaTest:
             p->initWithVertexShaderByteArray(ccPositionTextureColor_vert, ccPositionTextureColorAlphaTest_frag);
             

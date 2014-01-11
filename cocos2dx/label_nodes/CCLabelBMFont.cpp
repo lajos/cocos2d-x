@@ -507,7 +507,7 @@ bool CCLabelBMFont::initWithString(const char *theString, const char *fntFile, f
         m_pAlignment = alignment;
         
         m_cDisplayedOpacity = m_cRealOpacity = 255;
-		m_tDisplayedColor = m_tRealColor = ccWHITE;
+		m_tDisplayedColor = m_tRealColor = ccGRAY;
         m_bCascadeOpacityEnabled = true;
         m_bCascadeColorEnabled = true;
         
@@ -540,8 +540,8 @@ CCLabelBMFont::CCLabelBMFont()
 , m_pReusedChar(NULL)
 , m_cDisplayedOpacity(255)
 , m_cRealOpacity(255)
-, m_tDisplayedColor(ccWHITE)
-, m_tRealColor(ccWHITE)
+, m_tDisplayedColor(ccGRAY)
+, m_tRealColor(ccGRAY)
 , m_bCascadeColorEnabled(true)
 , m_bCascadeOpacityEnabled(true)
 , m_bIsOpacityModifyRGB(false)
@@ -803,7 +803,7 @@ void CCLabelBMFont::setColor(const ccColor3B& color)
 	m_tDisplayedColor = m_tRealColor = color;
 	
 	if( m_bCascadeColorEnabled ) {
-		ccColor3B parentColor = ccWHITE;
+		ccColor3B parentColor = ccGRAY;
         CCRGBAProtocol* pParent = dynamic_cast<CCRGBAProtocol*>(m_pParent);
         if (pParent && pParent->isCascadeColorEnabled())
         {
@@ -878,9 +878,9 @@ void CCLabelBMFont::updateDisplayedOpacity(GLubyte parentOpacity)
 
 void CCLabelBMFont::updateDisplayedColor(const ccColor3B& parentColor)
 {
-	m_tDisplayedColor.r = m_tRealColor.r * parentColor.r/255.0;
-	m_tDisplayedColor.g = m_tRealColor.g * parentColor.g/255.0;
-	m_tDisplayedColor.b = m_tRealColor.b * parentColor.b/255.0;
+	m_tDisplayedColor.r = m_tRealColor.r * parentColor.r/128.0;
+	m_tDisplayedColor.g = m_tRealColor.g * parentColor.g/128.0;
+	m_tDisplayedColor.b = m_tRealColor.b * parentColor.b/128.0;
     
     CCObject* pObj;
 	CCARRAY_FOREACH(m_pChildren, pObj)

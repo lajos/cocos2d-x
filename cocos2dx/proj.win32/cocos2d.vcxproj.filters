@@ -952,5 +952,11 @@
     <ClInclude Include="..\support\component\CCComponentContainer.h">
       <Filter>support\component</Filter>
     </ClInclude>
+    <ClInclude Include="..\shaders\ccShader_PositionTextureColor2_frag.h">
+      <Filter>shaders</Filter>
+    </ClInclude>
+    <ClInclude Include="..\shaders\ccShader_PositionTextureColor2_vert.h">
+      <Filter>shaders</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

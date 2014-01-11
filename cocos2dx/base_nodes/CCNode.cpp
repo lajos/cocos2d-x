@@ -1328,8 +1328,8 @@ void CCNode::removeAllComponents()
 CCNodeRGBA::CCNodeRGBA()
 : _displayedOpacity(255)
 , _realOpacity(255)
-, _displayedColor(ccWHITE)
-, _realColor(ccWHITE)
+, _displayedColor(ccGRAY)
+, _realColor(ccGRAY)
 , _cascadeColorEnabled(false)
 , _cascadeOpacityEnabled(false)
 {}
@@ -1341,7 +1341,7 @@ bool CCNodeRGBA::init()
     if (CCNode::init())
     {
         _displayedOpacity = _realOpacity = 255;
-        _displayedColor = _realColor = ccWHITE;
+        _displayedColor = _realColor = ccGRAY;
         _cascadeOpacityEnabled = _cascadeColorEnabled = false;
         return true;
     }
@@ -1432,7 +1432,7 @@ void CCNodeRGBA::setColor(const ccColor3B& color)
 	
 	if (_cascadeColorEnabled)
     {
-		ccColor3B parentColor = ccWHITE;
+		ccColor3B parentColor = ccGRAY;
         CCRGBAProtocol *parent = dynamic_cast<CCRGBAProtocol*>(m_pParent);
 		if (parent && parent->isCascadeColorEnabled())
         {
@@ -1445,9 +1445,9 @@ void CCNodeRGBA::setColor(const ccColor3B& color)
 
 void CCNodeRGBA::updateDisplayedColor(const ccColor3B& parentColor)
 {
-	_displayedColor.r = _realColor.r * parentColor.r/255.0;
-	_displayedColor.g = _realColor.g * parentColor.g/255.0;
-	_displayedColor.b = _realColor.b * parentColor.b/255.0;
+	_displayedColor.r = _realColor.r * parentColor.r/128.0;
+	_displayedColor.g = _realColor.g * parentColor.g/128.0;
+	_displayedColor.b = _realColor.b * parentColor.b/128.0;
     
     if (_cascadeColorEnabled)
     {

@@ -34,6 +34,6 @@ uniform sampler2D CC_Texture0;				\n\
 											\n\
 void main()									\n\
 {											\n\
-gl_FragColor = v_fragmentColor * texture2D(CC_Texture0, v_texCoord);			\n\
+gl_FragColor = vec4(v_fragmentColor[0]*2,v_fragmentColor[1]*2,v_fragmentColor[2]*2,v_fragmentColor[3]) * texture2D(CC_Texture0, v_texCoord);			\n\
 }											\n\
 ";

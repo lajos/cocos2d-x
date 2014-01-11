@@ -360,6 +360,8 @@ xcopy /Y /Q "$(ProjectDir)..\platform\third_party\win32\libraries\*.*" "$(OutDir
     <ClInclude Include="..\shaders\ccShader_PositionColor_vert.h" />
     <ClInclude Include="..\shaders\ccShader_PositionTextureA8Color_frag.h" />
     <ClInclude Include="..\shaders\ccShader_PositionTextureA8Color_vert.h" />
+    <ClInclude Include="..\shaders\ccShader_PositionTextureColor2_frag.h" />
+    <ClInclude Include="..\shaders\ccShader_PositionTextureColor2_vert.h" />
     <ClInclude Include="..\shaders\ccShader_PositionTextureColorAlphaTest_frag.h" />
     <ClInclude Include="..\shaders\ccShader_PositionTextureColor_frag.h" />
     <ClInclude Include="..\shaders\ccShader_PositionTextureColor_vert.h" />

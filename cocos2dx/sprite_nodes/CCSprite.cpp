@@ -177,14 +177,14 @@ bool CCSprite::initWithTexture(CCTexture2D *pTexture, const CCRect& rect, bool r
         memset(&m_sQuad, 0, sizeof(m_sQuad));
         
         // Atlas: Color
-        ccColor4B tmpColor = { 255, 255, 255, 255 };
+        ccColor4B tmpColor = { 128, 128, 128, 255 };
         m_sQuad.bl.colors = tmpColor;
         m_sQuad.br.colors = tmpColor;
         m_sQuad.tl.colors = tmpColor;
         m_sQuad.tr.colors = tmpColor;
 
         // shader program
-        setShaderProgram(CCShaderCache::sharedShaderCache()->programForKey(kCCShader_PositionTextureColor));
+        setShaderProgram(CCShaderCache::sharedShaderCache()->programForKey(kCCShader_PositionTextureColor2));
         
         // update texture (calls updateBlendFunc)
         setTexture(pTexture);

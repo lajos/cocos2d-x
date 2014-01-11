@@ -76,8 +76,8 @@ static const ccColor3B ccMAGENTA={255,0,255};
 static const ccColor3B ccBLACK={0,0,0};
 //! Orange Color (255,127,0)
 static const ccColor3B ccORANGE={255,127,0};
-//! Gray Color (166,166,166)
-static const ccColor3B ccGRAY={166,166,166};
+//! Gray Color (128,128,128)
+static const ccColor3B ccGRAY={128,128,128};
 
 /** RGBA color composed of 4 bytes
 @since v0.8

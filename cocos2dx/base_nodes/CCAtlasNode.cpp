@@ -87,7 +87,7 @@ bool CCAtlasNode::initWithTexture(CCTexture2D* texture, unsigned int tileWidth, 
     m_uItemWidth  = tileWidth;
     m_uItemHeight = tileHeight;
 
-    m_tColorUnmodified = ccWHITE;
+    m_tColorUnmodified = ccGRAY;
     m_bIsOpacityModifyRGB = true;
 
     m_tBlendFunc.src = CC_BLEND_SRC;
