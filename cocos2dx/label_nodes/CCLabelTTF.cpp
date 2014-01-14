@@ -31,7 +31,7 @@ THE SOFTWARE.
 NS_CC_BEGIN
 
 #if CC_USE_LA88_LABELS
-#define SHADER_PROGRAM kCCShader_PositionTextureColor2
+#define SHADER_PROGRAM kCCShader_PositionTextureColor
 #else
 #define SHADER_PROGRAM kCCShader_PositionTextureA8Color
 #endif
