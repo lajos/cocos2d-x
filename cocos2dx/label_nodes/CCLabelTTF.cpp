@@ -133,6 +133,8 @@ bool CCLabelTTF::initWithString(const char *string, const char *fontName, float 
     {
         // shader program
         this->setShaderProgram(CCShaderCache::sharedShaderCache()->programForKey(SHADER_PROGRAM));
+
+		setColor(ccWHITE);
         
         m_tDimensions = CCSizeMake(dimensions.width, dimensions.height);
         m_hAlignment  = hAlignment;
