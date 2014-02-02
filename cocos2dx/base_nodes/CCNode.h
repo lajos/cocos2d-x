@@ -606,7 +606,7 @@ public:
      *
      * @return a CCNode object whose tag equals to the input parameter
      */
-    CCNode * getChildByTag(int nodeName);
+    virtual CCNode * getChildByTag(int tag);
     /**
      * Gets a child from the container with its node name
      *
@@ -614,7 +614,7 @@ public:
      *
      * @return a CCNode object whose node name equals to the input parameter
      */
-	CCNode* getChildByNodeName(const std::string &aName);
+    CCNode * getChildByTag(int nodeName);
     /**
      * Return an array of children
      *
@@ -638,7 +638,7 @@ public:
      *
      * @return The amount of children.
      */
-    unsigned int getChildrenCount(void) const;
+    virtual unsigned int getChildrenCount(void) const;
     
     /**
      * Sets the parent node
