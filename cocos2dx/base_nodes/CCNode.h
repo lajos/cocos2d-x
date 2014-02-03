@@ -614,7 +614,7 @@ public:
      *
      * @return a CCNode object whose node name equals to the input parameter
      */
-    CCNode * getChildByTag(int nodeName);
+	virtual CCNode* getChildByNodeName(const std::string &aName);
     /**
      * Return an array of children
      *
