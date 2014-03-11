@@ -37,6 +37,7 @@ THE SOFTWARE.
 #include "cocoa/CCString.h"
 #include "cocoa/CCArray.h"
 #include "cocoa/CCDictionary.h"
+#include "CCDirector.h"
 #include <vector>
 
 using namespace std;
@@ -100,6 +101,8 @@ void CCSpriteFrameCache::addSpriteFramesWithDictionary(CCDictionary* dictionary,
     // check the format
     CCAssert(format >=0 && format <= 3, "format is not supported for CCSpriteFrameCache addSpriteFramesWithDictionary:textureFilename:");
 
+	float contentScale = CCDirector::sharedDirector()->getContentScaleFactor();
+
     CCDictElement* pElement = NULL;
     CCDICT_FOREACH(framesDict, pElement)
     {
@@ -141,6 +144,8 @@ void CCSpriteFrameCache::addSpriteFramesWithDictionary(CCDictionary* dictionary,
         else if(format == 1 || format == 2) 
         {
             CCRect frame = CCRectFromString(frameDict->valueForKey("frame")->getCString());
+			frame *= contentScale;
+
             bool rotated = false;
 
             // rotation
@@ -150,7 +155,10 @@ void CCSpriteFrameCache::addSpriteFramesWithDictionary(CCDictionary* dictionary,
             }
 
             CCPoint offset = CCPointFromString(frameDict->valueForKey("offset")->getCString());
-            CCSize sourceSize = CCSizeFromString(frameDict->valueForKey("sourceSize")->getCString());
+			offset *= contentScale;
+
+			CCSize sourceSize = CCSizeFromString(frameDict->valueForKey("sourceSize")->getCString());
+			sourceSize *= contentScale;
 
             // create frame
             spriteFrame = new CCSpriteFrame();

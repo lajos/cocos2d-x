@@ -220,6 +220,20 @@ bool CCSize::equals(const CCSize& target) const
         && (fabs(this->height - target.height) < FLT_EPSILON);
 }
 
+CCSize& CCSize::operator*=( const float &a )
+{
+	this->width *= a;
+	this->height *= a;
+	return *this;
+}
+
+CCSize& CCSize::operator/=( const float &a )
+{
+	this->width /= a;
+	this->height /= a;
+	return *this;
+}
+
 // implementation of CCRect
 
 CCRect::CCRect(void)
@@ -241,6 +255,30 @@ CCRect& CCRect::operator= (const CCRect& other)
 {
     setRect(other.origin.x, other.origin.y, other.size.width, other.size.height);
     return *this;
+}
+
+cocos2d::CCRect CCRect::operator/( const float &a ) const
+{
+	return CCRect(this->origin.x / a, this->origin.y / a, this->size.width / a, this->size.height / a);
+}
+
+CCRect& CCRect::operator/=( const float &a )
+{
+	this->origin /= a;
+	this->size /= a;
+	return *this;
+}
+
+cocos2d::CCRect CCRect::operator*( const float &a ) const
+{
+	return CCRect(this->origin.x * a, this->origin.y * a, this->size.width * a, this->size.height * a);
+}
+
+CCRect& CCRect::operator*=( const float &a )
+{
+	this->origin *= a;
+	this->size *= a;
+	return *this;
 }
 
 void CCRect::setRect(const float & x, const float & y, const float & width, const float & height)
@@ -311,5 +349,7 @@ bool CCRect::intersectsRect(const CCRect& rect) const
                   getMaxY() < rect.getMinY() ||
              rect.getMaxY() <      getMinY());
 }
+
+
 
 NS_CC_END

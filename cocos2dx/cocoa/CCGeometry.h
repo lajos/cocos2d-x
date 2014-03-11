@@ -327,7 +327,15 @@ public:
     /**
      * @lua NA
      */
+    CCSize& operator*=(const float &a);
+    /**
+     * @lua NA
+     */
     CCSize operator/(const float &a) const;
+    /**
+     * @lua NA
+     */
+    CCSize& operator/=(const float &a);
     /**
      * @lua NA
      */
@@ -358,6 +366,23 @@ public:
      * @lua NA
      */
     CCRect& operator= (const CCRect& other);
+	/**
+     * @lua NA
+     */
+    CCRect operator*(const float &a) const;
+    /**
+     * @lua NA
+     */
+    CCRect& operator*=(const float &a);
+	/**
+     * @lua NA
+     */
+    CCRect operator/(const float &a) const;
+    /**
+     * @lua NA
+     */
+    CCRect& operator/=(const float &a);
+
     void setRect(const float & x, const float & y, const float & width, const float & height);
     float getMinX() const; /// return the leftmost x-value of current rect
     float getMidX() const; /// return the midpoint x-value of current rect
