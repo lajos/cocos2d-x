@@ -253,6 +253,16 @@ bool CCFileUtilsMac::isFileExist(const std::string& strFilePath)
                 bRet = true;
             }
         }
+		else
+		{
+            NSString* fullpath = [[NSBundle mainBundle] pathForResource:[NSString stringWithUTF8String:strFilePath.c_str()]
+                                                                 ofType:nil
+                                                            inDirectory:nil];
+            if (fullpath != nil) {
+                bRet = true;
+            }
+		}
+			
     }
     else
     {
