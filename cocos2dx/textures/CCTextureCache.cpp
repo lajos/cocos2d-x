@@ -59,8 +59,9 @@ NS_CC_BEGIN
 typedef struct _AsyncStruct
 {
     std::string            filename;
+	std::string path;
     CCObject    *target;
-    SEL_CallFuncO        selector;
+    SEL_CallFuncOS        selector;
 } AsyncStruct;
 
 typedef struct _ImageInfo
@@ -251,7 +252,7 @@ CCDictionary* CCTextureCache::snapshotTextures()
     return pRet;
 }
 
-void CCTextureCache::addImageAsync(const char *path, CCObject *target, SEL_CallFuncO selector)
+void CCTextureCache::addImageAsync(const char *path, CCObject *target, SEL_CallFuncOS selector)
 {
 #ifdef EMSCRIPTEN
     CCLOGWARN("Cannot load image %s asynchronously in Emscripten builds.", path);
@@ -277,7 +278,7 @@ void CCTextureCache::addImageAsync(const char *path, CCObject *target, SEL_CallF
     {
         if (target && selector)
         {
-            (target->*selector)(texture);
+            (target->*selector)(texture, path);
         }
         
         return;
@@ -315,6 +316,7 @@ void CCTextureCache::addImageAsync(const char *path, CCObject *target, SEL_CallF
     // generate async struct
     AsyncStruct *data = new AsyncStruct();
     data->filename = fullpath.c_str();
+	data->path = path;
     data->target = target;
     data->selector = selector;
 
@@ -361,7 +363,7 @@ void CCTextureCache::addImageAsyncCallBack(float dt)
         CCImage *pImage = pImageInfo->image;
 
         CCObject *target = pAsyncStruct->target;
-        SEL_CallFuncO selector = pAsyncStruct->selector;
+        SEL_CallFuncOS selector = pAsyncStruct->selector;
         const char* filename = pAsyncStruct->filename.c_str();
 
         // generate texture in render thread
@@ -383,7 +385,7 @@ void CCTextureCache::addImageAsyncCallBack(float dt)
 
         if (target && selector)
         {
-            (target->*selector)(texture);
+            (target->*selector)(texture, pAsyncStruct->path);
             target->release();
         }        
 

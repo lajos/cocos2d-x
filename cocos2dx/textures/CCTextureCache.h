@@ -111,7 +111,7 @@ public:
     * @lua NA
     */
     
-    void addImageAsync(const char *path, CCObject *target, SEL_CallFuncO selector);
+    void addImageAsync(const char *path, CCObject *target, SEL_CallFuncOS selector);
 
     /* Returns whether there are active background image loading processes.
     * @since v2.2.1

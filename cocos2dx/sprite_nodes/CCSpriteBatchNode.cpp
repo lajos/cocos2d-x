@@ -174,6 +174,7 @@ void CCSpriteBatchNode::addChild(CCNode *child, int zOrder, int tag)
     CCAssert(dynamic_cast<CCSprite*>(child) != NULL, "CCSpriteBatchNode only supports CCSprites as children");
     CCSprite *pSprite = (CCSprite*)(child);
     // check CCSprite is using the same texture id
+	//CCLog("CCSpriteBatchNode::addChild: %d %d", pSprite->getTexture()->getName(), m_pobTextureAtlas->getTexture()->getName());
     CCAssert(pSprite->getTexture()->getName() == m_pobTextureAtlas->getTexture()->getName(), "CCSprite is not using the same texture id");
 
     CCNode::addChild(child, zOrder, tag);
