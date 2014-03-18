@@ -91,10 +91,10 @@ public:
 
 	const CCClassId classId() const { return m_classId; }
 
-    void release(void);
-    void retain(void);
-    CCObject* autorelease(void);
-    CCObject* copy(void);
+    virtual void release(void);
+    virtual void retain(void);
+    virtual CCObject* autorelease(void);
+    virtual CCObject* copy(void);
     bool isSingleReference(void) const;
     unsigned int retainCount(void) const;
     virtual bool isEqual(const CCObject* pObject);
