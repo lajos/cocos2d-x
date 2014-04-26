@@ -138,12 +138,25 @@ bool CCKeypadDispatcher::dispatchKeypadMSG(ccKeypadMSGType nMsgType)
             switch (nMsgType)
             {
             case kTypeBackClicked:
+				CCLog("back clicked");
                 pDelegate->keyBackClicked();
                 break;
             case kTypeMenuClicked:
+				CCLog("menu clicked");
                 pDelegate->keyMenuClicked();
                 break;
+			case kTypeDPadCenterClicked:
+			case kTypeDPadUpClicked:
+			case kTypeDPadDownClicked:
+			case kTypeDPadLeftClicked:
+			case kTypeDPadRightClicked:
+			case kTypeMediaPlayPauseClicked:
+			case kTypeMediaRewindClicked:
+			case kTypeMediaFastForwardClicked:
+				pDelegate->keyClicked(nMsgType);
+				break;
             default:
+				pDelegate->keyClicked(nMsgType);
                 break;
             }
         }

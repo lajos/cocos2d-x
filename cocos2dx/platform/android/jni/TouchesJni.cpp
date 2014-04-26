@@ -70,6 +70,14 @@ extern "C" {
 
     #define KEYCODE_BACK 0x04
     #define KEYCODE_MENU 0x52
+    #define KEYCODE_DPAD_CENTER 23
+    #define KEYCODE_DPAD_UP 19
+    #define KEYCODE_DPAD_DOWN 20
+    #define KEYCODE_DPAD_LEFT 21
+    #define KEYCODE_DPAD_RIGHT 22
+    #define KEYCODE_MEDIA_PLAY_PAUSE 85
+    #define KEYCODE_MEDIA_REWIND 89
+    #define KEYCODE_MEDIA_FAST_FORWARD 90
 
     JNIEXPORT jboolean JNICALL Java_org_cocos2dx_lib_Cocos2dxRenderer_nativeKeyDown(JNIEnv * env, jobject thiz, jint keyCode) {
         CCDirector* pDirector = CCDirector::sharedDirector();
@@ -80,6 +88,17 @@ extern "C" {
                 break;
             case KEYCODE_MENU:
                 if (pDirector->getKeypadDispatcher()->dispatchKeypadMSG(kTypeMenuClicked))
+                    return JNI_TRUE;
+                break;
+            case KEYCODE_DPAD_CENTER: 
+            case KEYCODE_DPAD_UP:
+            case KEYCODE_DPAD_DOWN:
+            case KEYCODE_DPAD_LEFT:
+            case KEYCODE_DPAD_RIGHT:
+            case KEYCODE_MEDIA_PLAY_PAUSE:
+            case KEYCODE_MEDIA_REWIND:
+            case KEYCODE_MEDIA_FAST_FORWARD:
+                if (pDirector->getKeypadDispatcher()->dispatchKeypadMSG((ccKeypadMSGType)keyCode))
                     return JNI_TRUE;
                 break;
             default:

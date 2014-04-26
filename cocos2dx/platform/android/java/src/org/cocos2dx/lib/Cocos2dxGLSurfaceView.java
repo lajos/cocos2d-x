@@ -74,6 +74,7 @@ public class Cocos2dxGLSurfaceView extends GLSurfaceView {
 
 	protected void initView() {
 		this.setEGLContextClientVersion(2);
+		this.setFocusable(true);
 		this.setFocusableInTouchMode(true);
 
 		Cocos2dxGLSurfaceView.mCocos2dxGLSurfaceView = this;
@@ -293,6 +294,15 @@ public class Cocos2dxGLSurfaceView extends GLSurfaceView {
 		switch (pKeyCode) {
 			case KeyEvent.KEYCODE_BACK:
 			case KeyEvent.KEYCODE_MENU:
+			case KeyEvent.KEYCODE_DPAD_CENTER:			// 23
+			case KeyEvent.KEYCODE_DPAD_UP:				// 19
+			case KeyEvent.KEYCODE_DPAD_DOWN:			// 20
+			case KeyEvent.KEYCODE_DPAD_LEFT:			// 21
+			case KeyEvent.KEYCODE_DPAD_RIGHT:			// 22
+			case KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE:		// 85
+			case KeyEvent.KEYCODE_MEDIA_REWIND:			// 89
+			case KeyEvent.KEYCODE_MEDIA_FAST_FORWARD:	// 90
+				Log.d("GLSurfaceView", "onKeyDown: " + pKeyCode);
 				this.queueEvent(new Runnable() {
 					@Override
 					public void run() {
